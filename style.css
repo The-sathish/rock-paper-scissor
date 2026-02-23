@@ -1,7 +1,4 @@
-/* ===== FONTS ===== */
 @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;600&display=swap');
-
-/* ===== CSS VARIABLES ===== */
 :root {
   --bg: #050510;
   --card-bg: rgba(10, 10, 30, 0.85);
@@ -17,14 +14,12 @@
   --glow-green: 0 0 20px #39ff14, 0 0 60px rgba(57,255,20,0.3);
 }
 
-/* ===== RESET ===== */
 *, *::before, *::after {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
 }
 
-/* ===== BODY & BACKGROUND ===== */
 body {
   font-family: 'Rajdhani', sans-serif;
   background: var(--bg);
@@ -37,7 +32,6 @@ body {
   position: relative;
 }
 
-/* Animated grid background */
 body::before {
   content: '';
   position: fixed;
@@ -51,7 +45,6 @@ body::before {
   z-index: 0;
 }
 
-/* Floating cyan orb (top-right) */
 body::after {
   content: '';
   position: fixed;
@@ -66,7 +59,6 @@ body::after {
   z-index: 0;
 }
 
-/* Floating pink orb (bottom-left) */
 .orb2 {
   position: fixed;
   width: 400px;
@@ -90,7 +82,6 @@ body::after {
   to   { transform: translate(30px, 40px) scale(1.1); }
 }
 
-/* ===== MAIN CONTAINER ===== */
 .arena {
   position: relative;
   z-index: 1;
@@ -135,7 +126,6 @@ body::after {
   margin-top: 6px;
 }
 
-/* ===== SCOREBOARD ===== */
 .scoreboard {
   display: flex;
   align-items: center;
@@ -182,7 +172,6 @@ body::after {
   100% { transform: scale(1); }
 }
 
-/* ===== ROUND PIPS ===== */
 .round-section {
   text-align: center;
   flex: 0 0 auto;
@@ -214,7 +203,6 @@ body::after {
 .pip.player-win   { background: var(--cyan); border-color: var(--cyan); box-shadow: var(--glow-cyan); }
 .pip.computer-win { background: var(--pink); border-color: var(--pink); box-shadow: var(--glow-pink); }
 
-/* ===== ROUND DISPLAY TEXT ===== */
 .round-display {
   text-align: center;
   margin-bottom: 20px;
@@ -229,7 +217,6 @@ body::after {
   text-shadow: 0 0 10px var(--yellow);
 }
 
-/* ===== BATTLE ZONE ===== */
 .battle-zone {
   display: flex;
   align-items: center;
@@ -288,7 +275,6 @@ body::after {
   letter-spacing: 2px;
 }
 
-/* ===== RESULT DISPLAY ===== */
 .result-display {
   text-align: center;
   height: 44px;
@@ -318,7 +304,6 @@ body::after {
 .result-text.lose { color: var(--pink);   text-shadow: var(--glow-pink); }
 .result-text.tie  { color: var(--yellow); text-shadow: 0 0 20px var(--yellow); }
 
-/* ===== CHOICE BUTTONS ===== */
 .choices {
   display: flex;
   gap: 14px;
@@ -344,7 +329,6 @@ body::after {
   overflow: hidden;
 }
 
-/* Gradient overlay on hover */
 .choice-btn::before {
   content: '';
   position: absolute;
@@ -355,7 +339,6 @@ body::after {
   border-radius: inherit;
 }
 
-/* Scan-line sweep on hover */
 .choice-btn::after {
   content: '';
   position: absolute;
@@ -383,7 +366,6 @@ body::after {
   animation: clickRipple 0.3s ease;
 }
 
-/* Disabled state while animating */
 .choice-btn.disabled {
   pointer-events: none;
   opacity: 0.4;
@@ -415,7 +397,6 @@ body::after {
 
 .choice-btn:hover .choice-name { color: var(--cyan); }
 
-/* ===== WINNER SCREEN ===== */
 .winner-screen {
   display: none;
   position: fixed;
@@ -535,7 +516,6 @@ body::after {
 
 .play-again-btn:active { transform: scale(0.96); }
 
-/* ===== CONFETTI ===== */
 .confetti-container {
   position: fixed;
   inset: 0;
@@ -565,7 +545,6 @@ body::after {
   }
 }
 
-/* ===== CPU THINKING ANIMATION ===== */
 .thinking {
   display: inline-block;
   font-size: 2rem;
@@ -577,7 +556,6 @@ body::after {
   to   { transform: scale(1.1) rotate(10deg); }
 }
 
-/* ===== FOOTER ===== */
 .footer {
   text-align: center;
   margin-top: 28px;
@@ -587,7 +565,6 @@ body::after {
   text-transform: uppercase;
 }
 
-/* ===== RESPONSIVE / MOBILE ===== */
 @media (max-width: 480px) {
   .arena        { padding: 28px 20px; margin: 12px; }
   .choice-btn   { width: 100px; height: 100px; }
