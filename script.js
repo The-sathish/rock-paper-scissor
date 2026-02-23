@@ -1,49 +1,29 @@
-/* ============================================================
-   ROCK PAPER SCISSORS — CYBER ARENA
-   script.js — All game logic, sound effects, and UI updates
-   ============================================================ */
 
-/* ===========================
-   GAME CONSTANTS
-=========================== */
 const EMOJIS  = { rock: '🪨', paper: '📄', scissors: '✂️' };
 const CHOICES = ['rock', 'paper', 'scissors'];
 
-// What each choice beats
 const BEATS = {
   rock:     'scissors',
   scissors: 'paper',
   paper:    'rock'
 };
 
-/* ===========================
-   GAME STATE
-=========================== */
+
 let playerScore  = 0;
 let cpuScore     = 0;
-let round        = 1;     // Current round number (ties don't increment this)
-let roundsPlayed = 0;     // Tracks pip count (only non-tie rounds)
-let isAnimating  = false; // Prevents spam-clicking during animations
+let round        = 1;     
+let roundsPlayed = 0;     
+let isAnimating  = false; 
 
-/* ===========================
-   SOUND EFFECTS
-   Using the Web Audio API — no external libraries needed
-=========================== */
+
 const AudioCtx = window.AudioContext || window.webkitAudioContext;
 let audioCtx;
 
-/** Lazy-initialize the AudioContext on first user interaction */
 function initAudio() {
   if (!audioCtx) audioCtx = new AudioCtx();
 }
 
-/**
- * Plays a single synthesized tone
- * @param {number} freq - Frequency in Hz
- * @param {string} type - Oscillator type: 'sine' | 'square' | 'sawtooth' | 'triangle'
- * @param {number} duration - Duration in seconds
- * @param {number} vol - Volume (0–1)
- */
+
 function playTone(freq, type, duration, vol = 0.15) {
   try {
     if (!audioCtx) return;
@@ -58,18 +38,15 @@ function playTone(freq, type, duration, vol = 0.15) {
     osc.start();
     osc.stop(audioCtx.currentTime + duration);
   } catch (e) {
-    // Silently fail if audio is not supported
   }
 }
 
-/** Short double-beep when the player selects a choice */
 function playSelectSound() {
   initAudio();
   playTone(440, 'sine', 0.08, 0.1);
   setTimeout(() => playTone(660, 'sine', 0.08, 0.08), 60);
 }
 
-/** Ascending chime on round win */
 function playWinSound() {
   initAudio();
   [523, 659, 784, 1047].forEach((f, i) =>
@@ -77,7 +54,6 @@ function playWinSound() {
   );
 }
 
-/** Descending growl on round loss */
 function playLoseSound() {
   initAudio();
   [300, 250, 200].forEach((f, i) =>
@@ -85,43 +61,30 @@ function playLoseSound() {
   );
 }
 
-/** Neutral blip on tie */
 function playTieSound() {
   initAudio();
   playTone(350, 'square', 0.15, 0.1);
 }
 
-/* ===========================
-   CORE GAME LOGIC
-=========================== */
 
-/**
- * Main function called when the player clicks a choice button
- * @param {string} playerPick - 'rock' | 'paper' | 'scissors'
- */
 function play(playerPick) {
-  if (isAnimating) return; // Ignore clicks during animation
+  if (isAnimating) return; 
   isAnimating = true;
 
   playSelectSound();
 
-  // Lock buttons while CPU is "thinking"
   setButtonsDisabled(true);
 
-  // Show player's pick immediately
   const playerChoiceEl = document.getElementById('playerChoice');
   playerChoiceEl.textContent = EMOJIS[playerPick];
   playerChoiceEl.classList.remove('glow-win', 'glow-lose');
 
-  // Show CPU thinking animation
   const cpuChoiceEl = document.getElementById('cpuChoice');
   cpuChoiceEl.innerHTML = '<span class="thinking">🤔</span>';
   cpuChoiceEl.classList.remove('glow-win', 'glow-lose');
 
-  // Clear previous result text
   showResult('', '');
 
-  // Delay to simulate CPU "thinking", then reveal result
   setTimeout(() => {
     const cpuPick = CHOICES[Math.floor(Math.random() * 3)];
     cpuChoiceEl.textContent = EMOJIS[cpuPick];
@@ -129,7 +92,6 @@ function play(playerPick) {
     const outcome = getOutcome(playerPick, cpuPick);
     processOutcome(outcome, playerChoiceEl, cpuChoiceEl);
 
-    // Re-enable buttons after a short pause
     setTimeout(() => {
       setButtonsDisabled(false);
       isAnimating = false;
@@ -138,19 +100,14 @@ function play(playerPick) {
   }, 700);
 }
 
-/**
- * Determines the round outcome
- * @returns {'win' | 'lose' | 'tie'}
- */
+
 function getOutcome(player, cpu) {
   if (player === cpu)         return 'tie';
   if (BEATS[player] === cpu)  return 'win';
   return 'lose';
 }
 
-/**
- * Updates scores, pips, and UI based on the round outcome
- */
+
 function processOutcome(outcome, playerEl, cpuEl) {
   if (outcome === 'win') {
     playerScore++;
@@ -173,14 +130,12 @@ function processOutcome(outcome, playerEl, cpuEl) {
     setPip(roundsPlayed, 'computer-win');
 
   } else {
-    // Tie — no points, round doesn't count
     showResult('🔄 TIE — NO POINT', 'tie');
     playTieSound();
   }
 
   updateScoreDisplay();
 
-  // Check if someone has won the match (first to 2 wins)
   if (playerScore === 2 || cpuScore === 2) {
     setTimeout(() => showWinnerScreen(), 900);
   } else {
@@ -189,39 +144,29 @@ function processOutcome(outcome, playerEl, cpuEl) {
   }
 }
 
-/* ===========================
-   UI UPDATE FUNCTIONS
-=========================== */
 
-/** Refreshes the visible score numbers */
 function updateScoreDisplay() {
   document.getElementById('playerScore').textContent = playerScore;
   document.getElementById('cpuScore').textContent    = cpuScore;
 }
 
-/** Updates the round label text */
 function updateRoundDisplay() {
   const labels = ['', 'ROUND 1', 'ROUND 2', 'ROUND 3'];
   document.getElementById('roundText').textContent =
     labels[Math.min(round, 3)] || 'FINAL ROUND';
 }
 
-/**
- * Shows the animated result message
- * @param {string} text - Message to display
- * @param {string} type - 'win' | 'lose' | 'tie' | '' (empty to hide)
- */
+
 function showResult(text, type) {
   const el = document.getElementById('resultText');
   el.className = 'result-text';
   el.textContent = text;
-  void el.offsetWidth; // Force reflow to restart transition
+  void el.offsetWidth; 
   if (text) {
     el.classList.add('show', type);
   }
 }
 
-/** Triggers the score pulse animation */
 function animateScore(id) {
   const el = document.getElementById(id);
   el.classList.remove('pulse');
@@ -229,28 +174,19 @@ function animateScore(id) {
   el.classList.add('pulse');
 }
 
-/** Enables or disables all choice buttons */
 function setButtonsDisabled(disabled) {
   document.querySelectorAll('.choice-btn').forEach(btn => {
     btn.classList.toggle('disabled', disabled);
   });
 }
 
-/**
- * Colors a round pip based on who won
- * @param {number} index - 1, 2, or 3
- * @param {string} cls - 'player-win' | 'computer-win'
- */
+
 function setPip(index, cls) {
   const pip = document.getElementById(`pip${index}`);
   if (pip) pip.classList.add(cls);
 }
 
-/* ===========================
-   WINNER SCREEN
-=========================== */
 
-/** Displays the full-screen match result overlay */
 function showWinnerScreen() {
   const playerWon = playerScore > cpuScore;
 
@@ -277,11 +213,7 @@ function showWinnerScreen() {
   document.getElementById('winnerScreen').classList.add('active');
 }
 
-/* ===========================
-   CONFETTI (CSS-powered)
-=========================== */
 
-/** Spawns 80 confetti pieces that fall from the top of the screen */
 function launchConfetti() {
   const container = document.getElementById('confettiContainer');
   const colors    = ['#00f5ff', '#ff006e', '#39ff14', '#ffe600', '#a855f7', '#ff8c00'];
@@ -314,24 +246,18 @@ function launchConfetti() {
     container.appendChild(piece);
   }
 
-  // Remove confetti from DOM after animation finishes
   setTimeout(() => { container.innerHTML = ''; }, 6000);
 }
 
-/* ===========================
-   RESET / PLAY AGAIN
-=========================== */
 
-/** Fully resets game state and UI for a new match */
+
 function resetGame() {
-  // Reset state variables
   playerScore  = 0;
   cpuScore     = 0;
   round        = 1;
   roundsPlayed = 0;
   isAnimating  = false;
 
-  // Reset UI elements
   updateScoreDisplay();
   updateRoundDisplay();
   showResult('', '');
@@ -343,19 +269,15 @@ function resetGame() {
   playerChoiceEl.className   = 'battle-choice';
   cpuChoiceEl.className      = 'battle-choice';
 
-  // Reset all round pips
   ['pip1', 'pip2', 'pip3'].forEach(id => {
     document.getElementById(id).className = 'pip';
   });
 
-  // Hide winner overlay and clean up confetti
   document.getElementById('winnerScreen').classList.remove('active');
   document.getElementById('confettiContainer').innerHTML = '';
 
   setButtonsDisabled(false);
 }
 
-/* ===========================
-   INIT — Run on page load
-=========================== */
+
 updateRoundDisplay();
