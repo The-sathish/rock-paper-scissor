@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ROCK PAPER SCISSORS — CYBER ARENA</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Decorative orb -->
+  <div class="orb2"></div>
+
+  <!-- Confetti Container -->
+  <div class="confetti-container" id="confettiContainer"></div>
+
+  <!-- ===== WINNER SCREEN ===== -->
+  <div class="winner-screen" id="winnerScreen">
+    <div class="winner-trophy" id="winnerTrophy">🏆</div>
+    <div class="winner-title" id="winnerTitle">VICTORY</div>
+    <div class="winner-subtitle" id="winnerSubtitle">Match Complete</div>
+    <div class="final-scores">
+      <div class="final-score-item p">
+        <div class="label">You</div>
+        <div class="num" id="finalPlayerScore">0</div>
+      </div>
+      <div class="final-score-item c">
+        <div class="label">CPU</div>
+        <div class="num" id="finalCPUScore">0</div>
+      </div>
+    </div>
+    <button class="play-again-btn" onclick="resetGame()">▶ PLAY AGAIN</button>
+  </div>
+
+  <!-- ===== MAIN ARENA ===== -->
+  <div class="arena">
+
+    <!-- Header -->
+    <div class="header">
+      <div class="title">Rock · Paper · Scissors</div>
+      <div class="subtitle">Cyber Arena — Best of 3</div>
+    </div>
+
+    <!-- Scoreboard -->
+    <div class="scoreboard">
+      <div class="score-block">
+        <div class="score-label">You</div>
+        <div class="score-num player" id="playerScore">0</div>
+      </div>
+
+      <div class="round-section">
+        <div class="round-label">Rounds</div>
+        <div class="pips">
+          <div class="pip" id="pip1"></div>
+          <div class="pip" id="pip2"></div>
+          <div class="pip" id="pip3"></div>
+        </div>
+      </div>
+
+      <div class="score-block">
+        <div class="score-label">CPU</div>
+        <div class="score-num computer" id="cpuScore">0</div>
+      </div>
+    </div>
+
+    <!-- Round Indicator -->
+    <div class="round-display">
+      <div class="round-text" id="roundText">ROUND 1</div>
+    </div>
+
+    <!-- Battle Zone -->
+    <div class="battle-zone">
+      <div class="battle-side">
+        <div class="battle-label">Your Pick</div>
+        <span class="battle-choice" id="playerChoice">❓</span>
+      </div>
+      <div class="vs-text">VS</div>
+      <div class="battle-side">
+        <div class="battle-label">CPU Pick</div>
+        <span class="battle-choice" id="cpuChoice">❓</span>
+      </div>
+    </div>
+
+    <!-- Result Display -->
+    <div class="result-display">
+      <div class="result-text" id="resultText"></div>
+    </div>
+
+    <!-- Choice Buttons -->
+    <div class="choices" id="choicesContainer">
+      <button class="choice-btn" onclick="play('rock')" data-choice="rock">
+        <span class="choice-emoji">🪨</span>
+        <span class="choice-name">Rock</span>
+      </button>
+      <button class="choice-btn" onclick="play('paper')" data-choice="paper">
+        <span class="choice-emoji">📄</span>
+        <span class="choice-name">Paper</span>
+      </button>
+      <button class="choice-btn" onclick="play('scissors')" data-choice="scissors">
+        <span class="choice-emoji">✂️</span>
+        <span class="choice-name">Scissors</span>
+      </button>
+    </div>
+
+    <div class="footer">© Cyber Arena — Built with Vanilla JS</div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
